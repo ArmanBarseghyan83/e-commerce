@@ -1,0 +1,18 @@
+#listing div {
+  height: 33rem;
+  width: 90%;
+}
+
+#listing {
+  animation: apear 350ms ease-out forwards;
+}
+
+@keyframes apear {
+  from {
+    scale: 0.7;
+  }
+
+  to {
+    scale: 1;
+  }
+}
