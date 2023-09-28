@@ -41,10 +41,6 @@
           class="block mt-4 md:inline-block md:mt-0 text-cyan-200 hover:text-white mr-4 text-white text-xl">
           All Listings
         </button>
-        <button data-page="categories"
-          class="block mt-4 md:inline-block md:mt-0 text-cyan-200 hover:text-white mr-4 text-xl">
-          Categories
-        </button>
         <button data-page="create-listing"
           class="block mt-4 md:inline-block md:mt-1 text-cyan-200 hover:text-white text-xl">
           Create Listing
@@ -56,7 +52,10 @@
   <main>
     <!-- ALL LISTINGS PAGE -->
     <section id="all-listings" class="container mx-auto mt-28">
-      <h1 class="text-4xl font-bold">All Listings</h1>
+      <button class="mr-4 text-cyan-500 hover:text-cyan-700 hover:underline" data-category="electronics">Electronics</button>
+      <button class="mr-4 text-cyan-500 hover:text-cyan-700 hover:underline" data-category="jewelery">Jewelery</button>
+      <button class="mr-4 text-cyan-500 hover:text-cyan-700 hover:underline" data-category="men's clothing">Men's Clothing</button>
+      <button class="mr-4 text-cyan-500 hover:text-cyan-700 hover:underline" data-category="women's clothing">Women's Clothing</button>
       <div class="listing-list flex flex-wrap w-100 mt-10 justify-evenly">
         <!-- We will delete and create list elements dynamically, but we need to add these classes to the created div element -->
         <div
@@ -76,11 +75,6 @@
         </div>
 
       </div>
-    </section>
-
-    <!-- CATEGORIES PAGE -->
-    <section id="categories" class="container mx-auto mt-28 hidden">
-      <h1 class="text-4xl font-bold">Categories</h1>
     </section>
 
     <!-- CREATE LESTING PAGE -->
