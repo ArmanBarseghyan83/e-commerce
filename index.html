@@ -52,10 +52,13 @@
   <main>
     <!-- ALL LISTINGS PAGE -->
     <section id="all-listings" class="container mx-auto mt-28">
-      <button class="mr-4 text-cyan-500 hover:text-cyan-700 hover:underline" data-category="electronics">Electronics</button>
+      <button class="mr-4 text-cyan-500 hover:text-cyan-700 hover:underline"
+        data-category="electronics">Electronics</button>
       <button class="mr-4 text-cyan-500 hover:text-cyan-700 hover:underline" data-category="jewelery">Jewelery</button>
-      <button class="mr-4 text-cyan-500 hover:text-cyan-700 hover:underline" data-category="men's clothing">Men's Clothing</button>
-      <button class="mr-4 text-cyan-500 hover:text-cyan-700 hover:underline" data-category="women's clothing">Women's Clothing</button>
+      <button class="mr-4 text-cyan-500 hover:text-cyan-700 hover:underline" data-category="men's clothing">Men's
+        Clothing</button>
+      <button class="mr-4 text-cyan-500 hover:text-cyan-700 hover:underline" data-category="women's clothing">Women's
+        Clothing</button>
       <div class="listing-list flex flex-wrap w-100 mt-10 justify-evenly">
         <!-- We will delete and create list elements dynamically, but we need to add these classes to the created div element -->
         <div
@@ -80,6 +83,26 @@
     <!-- CREATE LESTING PAGE -->
     <section id="create-listing" class="container mx-auto mt-28 hidden">
       <h1 class="text-4xl font-bold">Create Listing</h1>
+      <form id="submit-listing">
+        <label for="create-title">Product Title:</label>
+        <input id="create-title" type="text" name="title"><br>
+        <label for="create-description">Product Description:</label>
+        <input id="create-description" type="text" name="description"><br>
+        <label for="create-price">Price: $</label>
+        <input id="create-price" type="text" name="price"><br>
+        <label for="create-image">Image URL:</label>
+        <input id="create-image" type="text" name="image"><br>
+        <p>Select a Category:</p>
+        <input type="radio" id="create-electronics" name="category" value="electronics">
+        <label for="create-electronics">Electronics</label>
+        <input type="radio" id="create-jewelry" name="category" value="jewelry">
+        <label for="create-electronics">Jewelry</label>
+        <input type="radio" id="create-men-clothing" name="category" value="mens-clothing">
+        <label for="create-men-clothing">Men's Clothing</label>
+        <input type="radio" id="create-women-clothing" name="category" value="womens-clothing">
+        <label for="create-women-clothing">Women's Clothing</label><br>
+        <input type="submit" value="Create Listing">
+      </form>
     </section>
 
     <!-- LISTING PAGE -->

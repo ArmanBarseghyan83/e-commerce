@@ -6,6 +6,7 @@ const closeListingBtn = document.querySelector('.close-listing')
 const listingList = document.querySelectorAll(".listing-list div");
 const listingEl = document.querySelector("#listing");
 const categoryBtns = document.querySelectorAll('#all-listings button')
+var products = JSON.parse(localStorage.getItem('products')) || [];
 
 // OPEN AND CLOSE DROPDOWN NAV
 dropdownBtn.addEventListener('click', () => {
@@ -53,3 +54,23 @@ fetch('https://fakestoreapi.com/products/').then(res => res.json()).then(data =>
 fetch('https://fakestoreapi.com/products/categories').then(res => res.json()).then(data => console.log(data))
 fetch('https://fakestoreapi.com/products/1').then(res => res.json()).then(data => console.log(data))
 fetch('https://fakestoreapi.com/products/category/jewelery').then(res => res.json()).then(data => console.log(data))
+
+
+// FORM SUBMIT FOR CREATE LISTING
+var listing = document.querySelector('form');
+
+listing.addEventListener('submit', function (event) {
+    event.preventDefault();
+    var listingData = new FormData(listing);
+    var listingObj = Object.fromEntries(listingData);
+    var jsonListing = JSON.stringify(listingObj);
+
+    console.log(products);
+    products.push(jsonListing);
+    localStorage.setItem('products', JSON.stringify(products));
+    listing.reset();
+
+    var successEl = document.createElement('p');
+    successEl.textContent = 'Listing created successfully!';
+    listing.appendChild(successEl);
+})
