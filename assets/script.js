@@ -9,6 +9,7 @@ const categoryBtns = document.querySelectorAll('#all-listings button')
 const modalBackdropEl = document.querySelector(".modal-backdrop");
 const addCartBtn = document.querySelector("#listing button");
 const cartBtnQty = document.querySelector(".cart-btn span");
+var products = JSON.parse(localStorage.getItem('products')) || [];
 
 
 // TOGGLE DROPDOWN NAV BUTTONS AND CART BUTTONS
@@ -73,3 +74,21 @@ fetch('https://fakestoreapi.com/products/1').then(res => res.json()).then(data =
 fetch('https://fakestoreapi.com/products/category/jewelery').then(res => res.json()).then(data => console.log(data))
 
 
+// FORM SUBMIT FOR CREATE LISTING
+var listing = document.querySelector('form');
+
+listing.addEventListener('submit', function (event) {
+    event.preventDefault();
+    var listingData = new FormData(listing);
+    var listingObj = Object.fromEntries(listingData);
+    var jsonListing = JSON.stringify(listingObj);
+
+    console.log(products);
+    products.push(jsonListing);
+    localStorage.setItem('products', JSON.stringify(products));
+    listing.reset();
+
+    var successEl = document.createElement('p');
+    successEl.textContent = 'Listing created successfully!';
+    listing.appendChild(successEl);
+})
