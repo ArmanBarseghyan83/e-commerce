@@ -1,3 +1,23 @@
+.modal-backdrop {
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-2rem);
+  transition: all 250ms ease-in-out;
+}
+
+.modal-backdrop div {
+  width: 60%;
+  min-width: 20rem;
+  height: 25rem;
+  /* overflow-y: scroll; */
+}
+
+.active {
+  pointer-events: unset;
+  opacity: 1;
+  transform: translateY(0);
+}
+
 #listing div {
   height: 33rem;
   width: 90%;
