@@ -6,12 +6,22 @@ const closeListingBtn = document.querySelector('.close-listing')
 const listingList = document.querySelectorAll(".listing-list div");
 const listingEl = document.querySelector("#listing");
 const categoryBtns = document.querySelectorAll('#all-listings button')
+const modalBackdropEl = document.querySelector(".modal-backdrop");
+const addCartBtn = document.querySelector("#listing button");
+const cartBtnQty = document.querySelector(".cart-btn span");
 var products = JSON.parse(localStorage.getItem('products')) || [];
 
-// OPEN AND CLOSE DROPDOWN NAV
-dropdownBtn.addEventListener('click', () => {
-    pageBtnList.classList.toggle('hidden')
-})
+
+// TOGGLE DROPDOWN NAV BUTTONS AND CART BUTTONS
+document.addEventListener("click", (e) => {
+    if (e.target.matches(".dropdown-btn")) {
+        pageBtnList.classList.toggle("hidden");
+    } else if (e.target.matches(".cart-btn")) {
+        modalBackdropEl.classList.toggle("active");
+    } else if (e.target.matches(".modal-backdrop")) {
+        modalBackdropEl.classList.remove("active");
+    }
+});
 
 // TOGGLE BETWEEN PAGES, SET WHITE COLOR FOR THE ACTIVE PAGE BUTTON
 pageBtns.forEach((btn) => {
@@ -45,6 +55,14 @@ listingList.forEach((listing) => {
 closeListingBtn.addEventListener("click", () => {
     listingEl.style.display = "none"
     document.querySelector('#all-listings').style.display = "block"
+});
+
+addCartBtn.addEventListener("click", () => {
+    cartBtnQty.textContent = +cartBtnQty.textContent + 1;
+    cartBtnQty.classList.add("bg-blue-800");
+    setTimeout(() => {
+        cartBtnQty.classList.remove("bg-blue-800");
+    }, 150);
 });
 
 

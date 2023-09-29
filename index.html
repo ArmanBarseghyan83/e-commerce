@@ -49,6 +49,13 @@
     </div>
   </nav>
 
+  <!--  MODAL  -->
+  <section class="modal-backdrop h-screen fixed w-screen top-20 backdrop-blur-sm z-10">
+    <div class="bg-slate-200 absolute top-16 left-1/2 -translate-x-1/2 p-3 rounded-md shadow-xl shadow-slate-700 z-10">
+      <h2 class="text-4xl font-bold">Cart</h2>
+    </div>
+  </section>
+
   <main>
     <!-- ALL LISTINGS PAGE -->
     <section id="all-listings" class="container mx-auto mt-28">
@@ -109,9 +116,10 @@
     <section id="listing" class="container mx-auto mt-36 hidden">
       <h1 class="text-4xl font-bold ml-28 mb-10"></h1>
       <div
-        class="close-listing relative bg-slate-200 mx-auto p-3 rounded-md shadow-lg shadow-slate-300 border-2 border-solid border-slate-300">
+        class="relative bg-slate-200 mx-auto p-3 rounded-md shadow-lg shadow-slate-300 border-2 border-solid border-slate-300">
         <span
-          class="absolute right-4 top-4 text-4xl bg-slate-300 p-1 rounded-lg shadow-2xl cursor-pointer hover:bg-slate-400">&#10008;</span>
+          class="close-listing absolute right-4 top-4 text-4xl bg-slate-300 p-1 rounded-lg shadow-2xl cursor-pointer hover:bg-slate-400">&#10008;</span>
+        <button class="text-2xl bg-slate-300 p-1 rounded-lg shadow-2xl hover:bg-slate-400 ">Add to Cart</button>
       </div>
     </section>
 
