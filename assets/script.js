@@ -5,6 +5,7 @@ const pageBtns = document.querySelectorAll('.page-btn-list button')
 const closeListingBtn = document.querySelector('.close-listing')
 const listingList = document.querySelectorAll(".listing-list div");
 const listingEl = document.querySelector("#listing");
+const categoryBtns = document.querySelectorAll('#all-listings button')
 
 // OPEN AND CLOSE DROPDOWN NAV
 dropdownBtn.addEventListener('click', () => {
@@ -22,6 +23,14 @@ pageBtns.forEach((btn) => {
         pageBtnList.classList.add("hidden");
     });
 });
+
+// TOGGLE BETWEEN CATEGORIES
+categoryBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        categoryBtns.forEach((b) => b.classList.remove('text-cyan-700', 'underline'))
+        btn.classList.add('text-cyan-700', 'underline')
+    })
+})
 
 // OPEN LISTING PAGE WHEN CLICKING TO THE LISTING
 listingList.forEach((listing) => {
