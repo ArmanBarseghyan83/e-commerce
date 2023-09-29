@@ -83,7 +83,6 @@ listing.addEventListener('submit', function (event) {
     var listingObj = Object.fromEntries(listingData);
     var jsonListing = JSON.stringify(listingObj);
 
-    console.log(products);
     products.push(jsonListing);
     localStorage.setItem('products', JSON.stringify(products));
     listing.reset();
