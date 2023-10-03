@@ -5,9 +5,11 @@
   transition: all 250ms ease-in-out;
 }
 
-.modal-backdrop div {
-  width: 60%;
+.modal-backdrop > div {
+  width: 70%;
   min-width: 20rem;
+  max-height: 27rem;
+  overflow-y: scroll;
 }
 
 .active {
@@ -16,8 +18,8 @@
   transform: translateY(0);
 }
 
-#listing div {
-  height: 33rem;
+#listing > div {
+  height: 30rem;
 }
 
 #listing {
