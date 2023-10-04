@@ -18,6 +18,12 @@
   transform: translateY(0);
 }
 
+main.stop-scroll {
+  margin-top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
 #listing > div {
   height: 30rem;
 }

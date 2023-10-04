@@ -1,3 +1,4 @@
+const mainEl = document.querySelector("main");
 const sectionsLis = document.querySelectorAll("main section");
 const dropdownBtn = document.querySelector('.dropdown-btn');
 const pageBtnList = document.querySelector('.page-btn-list');
@@ -19,16 +20,22 @@ const products = JSON.parse(localStorage.getItem('products')) || [];
 const cartData = JSON.parse(localStorage.getItem('cart-data')) || [];
 
 
-// TOGGLE DROPDOWN NAV BUTTONS AND CART BUTTON
+// TOGGLE DROPDOWN NAV AND CART BUTTONS
 document.addEventListener("click", (e) => {
     if (e.target.matches(".dropdown-btn")) pageBtnList.classList.toggle("hidden");
-    else if (e.target.matches(".modal-backdrop")) modalBackdropEl.classList.remove("active");
+
+    else if (e.target.matches(".modal-backdrop")) {
+        modalBackdropEl.classList.remove("active");
+        mainEl.classList.toggle('stop-scroll')
+    }
+    
     else if (e.target.matches(".cart-btn")) {
         modalBackdropEl.classList.toggle("active");
-
+        mainEl.classList.toggle('stop-scroll')
         renderCartData()
     }
 });
+
 
 // TOGGLE BETWEEN PAGES, SET WHITE COLOR FOR THE ACTIVE PAGE BUTTON
 pageBtns.forEach((btn) => {
@@ -47,6 +54,7 @@ pageBtns.forEach((btn) => {
     });
 });
 
+
 // TOGGLE BETWEEN CATEGORIES
 categoryBtns.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -56,17 +64,20 @@ categoryBtns.forEach(btn => {
     })
 })
 
+
 // CLOSE LISTING PAGE USING CLOSE BUTTON ON THE LISTING PAGE
 closeListingBtn.addEventListener("click", () => {
     listingEl.style.display = "none"
     document.querySelector('#all-listings').style.display = "block"
 });
 
+
 // INCREASE CART QTY AND ADD THE LISTING TO THE CART USING 'ADD TO CART' BUTTON
 addCartBtn.addEventListener("click", () => {
     cartBtnQty.textContent = +cartBtnQty.textContent + 1;
     flashCartQty()
 
+    // For creating cart item take the data from listing page
     const image = listingDataEl.children[0].src
     const title = listingDataEl.children[1].children[0].textContent
     const price = listingDataEl.children[1].children[1].children[1].textContent
@@ -92,44 +103,22 @@ addCartBtn.addEventListener("click", () => {
 
 });
 
+
 // INCREASE AND DECREASE CART ITEMS QTY AND PRICE USING MINUS AND PLUS BUTTONS
 modalBackdropEl.addEventListener('click', (e) => {
     if (e.target.matches('.btn-minus')) {
-        const title = e.target.parentElement.previousElementSibling.children[2].textContent
-        cartBtnQty.textContent = +cartBtnQty.textContent - 1
-
-        //Allow decrease qty antil 1 and then delete item from cart
-        cartData.forEach((el) => {
-            if (el.qty > 1) {
-                if (el.title === title) {
-                    el.totalPrice = (+el.totalPrice - +el.price).toFixed(2)
-                    el.qty -= 1
-                }
-            }
-            else {
-                const itemIndex = cartData.findIndex(el => el.title === title)
-                cartData.splice(itemIndex, 1)
-            }
-        })
+        decreaseCartItem(e)
         flashCartQty()
     }
-    if (e.target.matches('.btn-plus')) {
-        const title = e.target.parentElement.previousElementSibling.children[2].textContent
-        cartBtnQty.textContent = +cartBtnQty.textContent + 1
-
-        // Increase item qty
-        cartData.forEach((el) => {
-            if (el.title === title) {
-                el.totalPrice = (+el.totalPrice + +el.price).toFixed(2)
-                el.qty += 1
-            }
-        })
+    else if (e.target.matches('.btn-plus')) {
+        incraseCartItem(e)
         flashCartQty()
     }
     // Update localstorage after increase or decrease and render the new data
     localStorage.setItem('cart-data', JSON.stringify(cartData))
     renderCartData()
 })
+
 
 // QTY FOR CART BUTTON
 cartData.forEach(el => cartBtnQty.textContent = +cartBtnQty.textContent + el.qty)
@@ -151,6 +140,7 @@ listingForm.addEventListener('submit', function (event) {
 
     location.reload()
 })
+
 
 // OPEN SPECIFIC LISTING PAGE
 document.querySelector(".listing-list").addEventListener('click', (e) => {
@@ -176,6 +166,39 @@ document.querySelector(".listing-list").addEventListener('click', (e) => {
 
 // <<<<<<<<<< HELPER FUNCTIONS >>>>>>>>>>>>>>
 
+// INCREASE CART ITEM QTY AND PRICE USING PLUS BUTTON
+const incraseCartItem = (e) => {
+    const title = e.target.parentElement.previousElementSibling.children[2].textContent
+    cartBtnQty.textContent = +cartBtnQty.textContent + 1
+
+    cartData.forEach((el) => {
+        if (el.title === title) {
+            el.totalPrice = (+el.totalPrice + +el.price).toFixed(2)
+            el.qty += 1
+        }
+    })
+}
+
+
+// DECREASE CART ITEM QTY AND PRICE USING MINUS BUTTON
+const decreaseCartItem = (e) => {
+    const title = e.target.parentElement.previousElementSibling.children[2].textContent
+    cartBtnQty.textContent = +cartBtnQty.textContent - 1
+
+    //Allow decrease qty antil 1 and then delete item from cart
+    cartData.forEach((el) => {
+        if (el.qty > 1 && el.title === title) {
+            el.totalPrice = (+el.totalPrice - +el.price).toFixed(2)
+            el.qty -= 1
+        }
+        else if (el.qty === 1 && el.title === title) {
+            const itemIndex = cartData.findIndex(el => el.title === title)
+            cartData.splice(itemIndex, 1)
+        }
+    })
+}
+
+
 // CREATE CART ELEMENTS BASED ON CART DATA SAVED IN LOCALSTORAGE
 const renderCartData = () => {
     cartItemsListEl.textContent = ''
@@ -197,9 +220,9 @@ const renderCartData = () => {
         cartItemEl.classList.add('flex', 'justify-between', 'border-b-2', 'border-dotted', 'border-slate-400')
         imagEl.classList.add('w-9', 'mt-3', 'inline')
         imagEl.src = el.image
-        priceEl.classList.add('text-cyan-600', 'text-2xl', 'ml-10')
+        priceEl.classList.add('text-cyan-600', 'text-2xl', 'ml-10', 'italic')
         priceEl.textContent = `$${el.totalPrice}`
-        titleEl.classList.add('w-40', 'text-ellipsis', 'whitespace-nowrap', 'overflow-hidden')
+        titleEl.classList.add('italic','w-40', 'text-ellipsis', 'whitespace-nowrap', 'overflow-hidden')
         titleEl.textContent = el.title
         buttonsWrapperEl.classList.add('m-0', 'flex', 'items-center')
         minusBtnEl.classList.add('btn-minus', 'text-cyan-600', 'text-4xl', 'pb-1', 'pr-3')
@@ -217,6 +240,7 @@ const renderCartData = () => {
     cartTotalEl.textContent = `$${total.toFixed(2)}`
 }
 
+
 // FLASH THE BACKGROUND COLOR OF CART QTY
 const flashCartQty = () => {
     cartBtnQty.classList.add("bg-blue-800");
@@ -224,6 +248,7 @@ const flashCartQty = () => {
         cartBtnQty.classList.remove("bg-blue-800");
     }, 100);
 }
+
 
 // FETCH DATA FOR SPECIFIC LISTING
 const displayApiListing = (id) => {
@@ -238,6 +263,7 @@ const displayApiListing = (id) => {
         })
 }
 
+
 // CREATE ELEMENTS FOR SPECIFIC LISTING PAGE BASED ON PASSED DATA
 const renderListingData = (data) => {
     listingDataEl.previousElementSibling.textContent = ''
@@ -250,6 +276,7 @@ const renderListingData = (data) => {
     listingDataEl.children[1].children[3].children[1].textContent = data.description
 }
 
+
 // CREATE CARD ELEMENTS FOR ALL LISTINGS PAGE BASED ON PASSED DATA
 const renderListingsData = (data) => {
     data.forEach(el => {
@@ -258,12 +285,13 @@ const renderListingsData = (data) => {
         imgEl.src = el.image
         imgEl.classList.add('pointer-events-none')
         divEl.setAttribute('data-id', `${el.id}`)
-        divEl.classList.add('bg-white', 'w-56', 'h-80', 'mb-4', 'cursor-pointer', 'text-2xl', 'rounded-md', 'shadow-lg', 'shadow-slate-300', 'border-2', 'border-solid', 'border-slate-300', 'overflow-hidden')
+        divEl.classList.add('hover:brightness-75', 'bg-white', 'w-56', 'h-80', 'mb-4', 'cursor-pointer', 'text-2xl', 'rounded-md', 'shadow-lg', 'shadow-slate-300', 'border-2', 'border-solid', 'border-slate-300', 'overflow-hidden')
         divEl.append(imgEl)
         document.querySelector(".listing-list").appendChild(divEl)
 
     })
 }
+
 
 // FETCH DATA FOR SPECIFIC CATEGORY AND RENDER TO THE PAGE
 const displaySingleCatListings = (category) => {
@@ -282,6 +310,7 @@ const displaySingleCatListings = (category) => {
         .catch(() => allListngsEl.children[5].textContent = 'Could not fetch the data!')
 }
 
+
 // FETCH DATA FOR ALL LISTNGS AND RENDER TO THE PAGE
 const displayAllCatListings = () => {
     allListngsEl.children[5].textContent = 'Loading...'
@@ -293,6 +322,7 @@ const displayAllCatListings = () => {
         })
         .catch(() => allListngsEl.children[5].textContent = 'Could not fetch the data!')
 }
+
 
 // BY DEFAULT HAVE ALL LISTINGS ON THE PAGE
 displayAllCatListings()
