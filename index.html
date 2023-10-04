@@ -18,7 +18,7 @@
     <div>
       <!-- CART BUTTON -->
       <button
-        class="cart-btn px-4 py-2 border  rounded-full text-teal-100 border-teal-100 hover:border-transparent hover:bg-cyan-800 absolute md:right-8 right-24 top-8">
+        class="cart-btn px-4 py-2 border  rounded-full text-teal-100 border-teal-100 hover:border-transparent hover:bg-cyan-800 absolute md:right-8 right-20 top-8">
         Cart <span class="bg-blue-400 px-3 py-1 ml-1 rounded-xl pointer-events-none w-40">0</span>
       </button>
 
@@ -26,7 +26,7 @@
         <!-- DROPDOWN MENU BUTTON -->
         <button
           class="dropdown-btn flex items-center px-3 py-2 border rounded text-teal-100 border-teal-100 hover:text-white hover:border-white">
-          <svg class="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+          <svg class="pointer-events-none fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <title>Menu</title>
             <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
           </svg>
@@ -34,7 +34,7 @@
       </div>
     </div>
 
-    <!-- NAVBAR BUTTONS TO TOGGLE DIFFERENT PAGES (by default hidden on small screens) -->
+    <!-- NAVBAR BUTTONS TO TOGGLE DIFFERENT PAGES -->
     <div class="page-btn-list w-full flex-grow md:flex md:items-center md:w-auto hidden ">
       <div class="lg:flex-grow">
         <button data-page="all-listings"
@@ -51,9 +51,14 @@
 
   <!-- CART MODAL  -->
   <section class="modal-backdrop h-screen fixed w-screen top-20 backdrop-blur-sm z-10">
-    <div class="bg-slate-200 absolute top-16 left-1/2 -translate-x-1/2 p-3 rounded-md shadow-xl shadow-slate-700 z-10">
-      <h2 class="text-2xl font-bold">Cart</h2>
-      
+    <div class="bg-slate-200 absolute top-10 left-1/2 -translate-x-1/2 p-3 shadow-xl shadow-slate-700 z-10">
+
+      <div id="cart-items"></div>
+
+      <div>
+        <p class="text-xl inline">Total:</p>
+        <span class="cart-total text-cyan-600 text-2xl ml-7"></span>
+      </div>
     </div>
   </section>
 
@@ -70,16 +75,13 @@
       <button class="mr-4 text-cyan-500 text-lg hover:text-cyan-700 hover:underline"
         data-category="women's clothing">Women's
         Clothing</button>
-      <div class="listing-list flex flex-wrap w-100 mt-10 justify-evenly">
-
-      </div>
+      <div class="listing-list flex flex-wrap w-100 mt-10 justify-evenly"></div>
+      <p class="text-2xl text-gray-500"></p>
     </section>
 
     <!-- CREATE LESTING PAGE -->
     <section id="create-listing" class="container mx-auto mt-28 hidden">
-      
       <div class="w-full max-w-2xl mx-auto">
-        
         <form id="submit-listing" class="bg-white shadow-lg rounded px-8 pt-6 pb-8 mb-4">
           <h1 class="text-3xl block text-gray-700 font-bold pb-2 mb-10 border-b-2">Create Listing</h1>
           <label for="create-title" class="block text-gray-700 text-lg font-bold mb-2">Product Title:</label>
@@ -100,14 +102,18 @@
             class="shadow appearance-none border rounded mb-6 w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             type="text" name="image"><br>
           <p class="block text-gray-700 text-lg font-bold mb-2">Select a Category:</p>
-          <label for="create-electronics" class="text-gray-400 text-sm font-bold mb-2 cursor-pointer italic">Electronics</label>
-          <input type="radio" id="create-electronics" name="category" value="electronics" checked >
-          <label for="create-jewelry" class="text-gray-400 text-sm font-bold mb-2 ml-3 cursor-pointer italic">Jewelry</label>
-          <input type="radio" id="create-jewelry" name="category" value="jewelry">
-          <label for="create-men-clothing" class="text-gray-400 text-sm font-bold mb-2 ml-3 cursor-pointer italic">Men's Clothing</label>
-          <input type="radio" id="create-men-clothing" name="category" value="mens-clothing">
-          <label for="create-women-clothing" class="text-gray-400 text-sm font-bold mb-2 ml-3 cursor-pointer italic">Women's Clothing</label>
-          <input type="radio" id="create-women-clothing" name="category" value="womens-clothing"><br>
+          <label for="create-electronics"
+            class="text-gray-400 text-sm font-bold mb-2 cursor-pointer italic">Electronics</label>
+          <input type="radio" id="create-electronics" name="category" value="electronics" checked>
+          <label for="create-jewelry"
+            class="text-gray-400 text-sm font-bold mb-2 ml-3 cursor-pointer italic">Jewelry</label>
+          <input type="radio" id="create-jewelry" name="category" value="jewelery">
+          <label for="create-men-clothing" class="text-gray-400 text-sm font-bold mb-2 ml-3 cursor-pointer italic">Men's
+            Clothing</label>
+          <input type="radio" id="create-men-clothing" name="category" value="men's clothing">
+          <label for="create-women-clothing"
+            class="text-gray-400 text-sm font-bold mb-2 ml-3 cursor-pointer italic">Women's Clothing</label>
+          <input type="radio" id="create-women-clothing" name="category" value="women's clothing"><br>
           <input
             class="bg-blue-500 hover:bg-blue-700 text-white font-bold mt-4 py-2 px-6 rounded focus:outline-none focus:shadow-outline cursor-pointer"
             type="submit" value="Create Listing">
@@ -119,7 +125,7 @@
     <section id="listing" class="container mx-auto mt-32 hidden">
       <div
         class="relative overflow-y-scroll w-11/12 bg-slate-200 mx-auto p-3 rounded-md shadow-lg shadow-slate-300 border-2 border-solid border-slate-300">
-        <p class="text-4xl text-cyan-500"></p>
+        <p class="text-2xl text-gray-500"></p>
         <div class="listing-data pb-10 ">
           <img class="w-4/12" alt="listing-img">
           <div class="lg:absolute lg:w-1/2 h-60 top-6 right-16 ">
