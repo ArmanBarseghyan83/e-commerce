@@ -28,7 +28,7 @@ document.addEventListener("click", (e) => {
         modalBackdropEl.classList.remove("active");
         mainEl.classList.toggle('stop-scroll')
     }
-    
+
     else if (e.target.matches(".cart-btn")) {
         modalBackdropEl.classList.toggle("active");
         mainEl.classList.toggle('stop-scroll')
@@ -222,7 +222,7 @@ const renderCartData = () => {
         imagEl.src = el.image
         priceEl.classList.add('text-cyan-600', 'text-2xl', 'ml-10', 'italic')
         priceEl.textContent = `$${el.totalPrice}`
-        titleEl.classList.add('italic','w-40', 'text-ellipsis', 'whitespace-nowrap', 'overflow-hidden')
+        titleEl.classList.add('italic', 'w-40', 'text-ellipsis', 'whitespace-nowrap', 'overflow-hidden')
         titleEl.textContent = el.title
         buttonsWrapperEl.classList.add('m-0', 'flex', 'items-center')
         minusBtnEl.classList.add('btn-minus', 'text-cyan-600', 'text-4xl', 'pb-1', 'pr-3')
@@ -327,3 +327,38 @@ const displayAllCatListings = () => {
 // BY DEFAULT HAVE ALL LISTINGS ON THE PAGE
 displayAllCatListings()
 
+// FUNCTION FOR LOOKING UP ISBN AND RETRIEVING BOOK COVER ART
+document.addEventListener("DOMContentLoaded", function () {
+    const searchButton = document.getElementById("bookSearchButton");
+    const bookNameInput = document.getElementById("bookSearchInput");
+    const bookCoverImage = document.getElementById("bookCover");
+    searchButton.addEventListener("click", function () {
+        const bookName = bookNameInput.value;
+        // Search for the book and get the first ISBN
+        fetch(`https://openlibrary.org/search.json?q=${bookName}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.docs && data.docs.length > 0) {
+                    const firstBook = data.docs[0];
+                    const firstISBN = firstBook.isbn ? firstBook.isbn[0] : null;
+                    if (firstISBN) {
+                        // Fetch book cover using the ISBN
+                        fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${firstISBN}&jscmd=data&format=json`)
+                            .then(response => response.json())
+                            .then(bookData => {
+                                if (bookData && bookData[`ISBN:${firstISBN}`]) {
+                                    const coverURL = bookData[`ISBN:${firstISBN}`].cover.medium;
+                                    bookCoverImage.src = coverURL;
+                                } else {
+                                    bookCoverImage.src = ""; // No cover found
+                                }
+                            })
+                            .catch(error => console.error("Error fetching book cover:", error));
+                    }
+                } else {
+                    bookCoverImage.src = ""; // No book found
+                }
+            })
+            .catch(error => console.error("Error searching for the book:", error));
+    });
+});
