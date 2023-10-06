@@ -10,11 +10,14 @@ const categoryBtns = document.querySelectorAll('#all-listings button')
 const modalBackdropEl = document.querySelector(".modal-backdrop");
 const addCartBtn = document.querySelector("#listing button");
 const cartBtnQty = document.querySelector(".cart-btn span");
-const bookForm = document.querySelector('#book-form');
 const listingForm = document.querySelector('#submit-listing');
 const listingDataEl = document.querySelector('.listing-data');
 const cartItemsListEl = document.querySelector('#cart-items')
 const cartTotalEl = document.querySelector('.cart-total')
+const searchButton = document.getElementById("bookSearchButton");
+const bookNameInput = document.getElementById("bookSearchInput");
+const bookCoverImage = document.getElementById("bookCover");
+const bookTitle = document.querySelector('#title')
 
 const products = JSON.parse(localStorage.getItem('products')) || [];
 const cartData = JSON.parse(localStorage.getItem('cart-data')) || [];
@@ -163,6 +166,65 @@ document.querySelector(".listing-list").addEventListener('click', (e) => {
     }
 })
 
+// FUNCTION FOR LOOKING UP ISBN AND RETRIEVING BOOK COVER ART
+
+searchButton.addEventListener("click", function () {
+    
+    //If the cart total is less than $300 don't let to search a book.
+    if (+cartTotalEl.textContent.slice(1) < 300) {
+        localStorage.removeItem('book')
+        bookCoverImage.src = ""
+        bookCoverImage.nextElementSibling.textContent = ''
+        bookTitle.textContent = 'Total must be greater than $300'
+        bookTitle.classList.add('text-red-600')
+    }
+    else {
+
+        bookTitle.textContent = 'Loading...'
+        bookTitle.classList.remove('text-red-600')
+        const bookName = bookNameInput.value;
+        // Search for the book and get the first ISBN
+        fetch(`https://openlibrary.org/search.json?q=${bookName}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.docs && data.docs.length > 0) {
+                    const firstBook = data.docs[0];
+                    const firstISBN = firstBook.isbn ? firstBook.isbn[0] : null;
+                    if (firstISBN) {
+                        // Fetch book cover using the ISBN
+                        fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${firstISBN}&jscmd=data&format=json`)
+                            .then(response => response.json())
+                            .then(bookData => {
+                                bookCoverImage.src = ""
+                                if (bookData && bookData[`ISBN:${firstISBN}`]) {
+                                    const coverURL = bookData[`ISBN:${firstISBN}`].cover.small;
+                                    bookCoverImage.src = coverURL;
+                                } else {
+                                    bookCoverImage.src = "./assets/images/error.png"; // No cover found
+                                }
+                                bookTitle.textContent = data.docs[0].title
+                                bookCoverImage.nextElementSibling.textContent = '$0'
+                            })
+                            .catch(() => {
+                                bookCoverImage.src = "./assets/images/error.png"; // No cover found
+                                bookTitle.textContent = data.docs[0].title
+                                bookCoverImage.nextElementSibling.textContent = '$0'
+                            });
+                    }
+                } else {
+                    bookCoverImage.src = "./assets/images/error.png"; // No book found
+                    bookTitle.textContent = 'No book found:'
+                }
+            })
+            .catch(() => {
+                bookCoverImage.src = "./assets/images/error.png"; // No book found
+                bookTitle.textContent = 'Error searching for the book:'
+            });
+    }
+
+});
+
+
 
 // <<<<<<<<<< HELPER FUNCTIONS >>>>>>>>>>>>>>
 
@@ -238,7 +300,13 @@ const renderCartData = () => {
         cartItemsListEl.append(cartItemEl)
     })
     cartTotalEl.textContent = `$${total.toFixed(2)}`
+
+    if (total < 300 && bookTitle.textContent !== 'Total must be greater than $300') {
+        bookTitle.classList.add('line-through', 'decoration-red-600', 'decoration-2')
+    }
+    else bookTitle.classList.remove('line-through')
 }
+
 
 
 // FLASH THE BACKGROUND COLOR OF CART QTY
@@ -285,7 +353,7 @@ const renderListingsData = (data) => {
         imgEl.src = el.image
         imgEl.classList.add('pointer-events-none')
         divEl.setAttribute('data-id', `${el.id}`)
-        divEl.classList.add('hover:brightness-75', 'bg-white', 'w-56', 'h-80', 'mb-4', 'cursor-pointer', 'text-2xl', 'rounded-md', 'shadow-lg', 'shadow-slate-300', 'border-2', 'border-solid', 'border-slate-300', 'overflow-hidden')
+        divEl.classList.add('hover:brightness-75', 'bg-white', 'w-44', 'h-60', 'md:w-56', 'md:h-80', 'mb-4', 'cursor-pointer', 'text-2xl', 'rounded-md', 'shadow-lg', 'shadow-slate-300', 'border-2', 'border-solid', 'border-slate-300', 'overflow-hidden')
         divEl.append(imgEl)
         document.querySelector(".listing-list").appendChild(divEl)
 
@@ -327,38 +395,3 @@ const displayAllCatListings = () => {
 // BY DEFAULT HAVE ALL LISTINGS ON THE PAGE
 displayAllCatListings()
 
-// FUNCTION FOR LOOKING UP ISBN AND RETRIEVING BOOK COVER ART
-document.addEventListener("DOMContentLoaded", function () {
-    const searchButton = document.getElementById("bookSearchButton");
-    const bookNameInput = document.getElementById("bookSearchInput");
-    const bookCoverImage = document.getElementById("bookCover");
-    searchButton.addEventListener("click", function () {
-        const bookName = bookNameInput.value;
-        // Search for the book and get the first ISBN
-        fetch(`https://openlibrary.org/search.json?q=${bookName}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.docs && data.docs.length > 0) {
-                    const firstBook = data.docs[0];
-                    const firstISBN = firstBook.isbn ? firstBook.isbn[0] : null;
-                    if (firstISBN) {
-                        // Fetch book cover using the ISBN
-                        fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${firstISBN}&jscmd=data&format=json`)
-                            .then(response => response.json())
-                            .then(bookData => {
-                                if (bookData && bookData[`ISBN:${firstISBN}`]) {
-                                    const coverURL = bookData[`ISBN:${firstISBN}`].cover.medium;
-                                    bookCoverImage.src = coverURL;
-                                } else {
-                                    bookCoverImage.src = ""; // No cover found
-                                }
-                            })
-                            .catch(error => console.error("Error fetching book cover:", error));
-                    }
-                } else {
-                    bookCoverImage.src = ""; // No book found
-                }
-            })
-            .catch(error => console.error("Error searching for the book:", error));
-    });
-});
