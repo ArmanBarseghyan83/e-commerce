@@ -374,11 +374,14 @@ const renderListingsData = (data) => {
     data.forEach(el => {
         const divEl = document.createElement('div')
         const imgEl = document.createElement('img')
+        const pEl = document.createElement ('p')
+        pEl.textContent = `$${el.price}`
+        pEl.classList.add('absolute', 'left-1', 'top-1', 'text-cyan-400')
         imgEl.src = el.image
         imgEl.classList.add('pointer-events-none')
         divEl.setAttribute('data-id', `${el.id}`)
-        divEl.classList.add('hover:brightness-75', 'bg-white', 'w-44', 'h-60', 'md:w-56', 'md:h-80', 'mb-4', 'cursor-pointer', 'text-2xl', 'rounded-md', 'shadow-lg', 'shadow-slate-300', 'border-2', 'border-solid', 'border-slate-300', 'overflow-hidden')
-        divEl.append(imgEl)
+        divEl.classList.add('relative', 'hover:brightness-75', 'bg-white', 'w-44', 'h-60', 'md:w-56', 'md:h-80', 'mb-4', 'cursor-pointer', 'text-2xl', 'rounded-md', 'shadow-lg', 'shadow-slate-300', 'border-2', 'border-solid', 'border-slate-300', 'overflow-hidden')
+        divEl.append(imgEl,pEl)
         document.querySelector(".listing-list").appendChild(divEl)
 
     })
