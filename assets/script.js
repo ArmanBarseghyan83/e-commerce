@@ -362,3 +362,31 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => console.error("Error searching for the book:", error));
     });
 });
+
+// FUNCTION FOR COOKIE
+function setCookie(name, value, days) {
+    const expires = new Date();
+    expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+    document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+  }
+  
+  // CHECK IF USER ACCEPTED COOKIES
+  function hasAcceptedCookies() {
+    return document.cookie.includes('cookiesAccepted=true');
+  }
+  
+  // CLOSE BANNER AND SET COOKIE
+  function closeBanner() {
+    setCookie('cookiesAccepted', 'true', 30); // Set a cookie for 30 days
+    document.getElementById('cookie-banner').style.display = 'none';
+  }
+  
+  // DISPLAY BANNER IF USER HAS NOT ACCEPTED COOKIES
+  if (!hasAcceptedCookies()) {
+    document.getElementById('cookie-banner').style.display = 'block';
+  }
+  
+  // "Accept all cookies" EVENT LISTENER
+  document.getElementById('accept-cookies').addEventListener('click', closeBanner);
+
+  
