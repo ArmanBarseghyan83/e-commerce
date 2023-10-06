@@ -21,7 +21,7 @@ Tailwind for their utility API that was used to design the layout features of th
 https://armanbarseghyan83.github.io/e-commerce/
 
 ## Image(s)
-![](./images/create-listing-page.png)
-![](./images/item-details-page.png)
-![](./images/landing-page.png)
-![](./images/shopping-cart-page.png)
+![](./assets/images/create-listing-page.png)
+![](./assets/images/item-details-page.png)
+![](./assets/images/landing-page.png)
+![](./assets/images/shopping-cart-page.png)
