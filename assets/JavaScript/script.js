@@ -250,7 +250,7 @@ searchButton.addEventListener('click', function () {
 // "Accept all cookies" EVENT LISTENER
   document.getElementById('accept-cookies').addEventListener('click', closeBanner);
 
-// <<<<<<<<<< HELPER FUNCTIONS >>>>>>>>>>>>>>
+// <<<<<<<<<< HELPER FUNCTIONS >>>>>>>>>>>>>>************
 
 // INCREASE CART ITEM QTY AND PRICE USING PLUS BUTTON
 const incraseCartItem = (e) => {
